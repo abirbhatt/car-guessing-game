@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        img {
+            max-width: 400px;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+        #message {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+            margin: 10px;
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guess the Car!</h1>
+    <img id="carImage" src="" alt="Car image">
+    <br>
+    <input type="text" id="guessInput" placeholder="Enter car name">
+    <button onclick="checkGuess()">Submit Guess</button>
+    <div id="message"></div>
+
+    <script>
+        const cars = [
+    { name: "McLaren F1", image: "1.jpg" },
+    { name: "Ferrari 250 GTO", image: "2.jpg" },
+    { name: "Mercedes-Benz 300SL Gullwing", image: "3.jpg" },
+    { name: "Lamborghini Miura", image: "4.jpg" },
+    { name: "Bugatti Type 57SC Atlantic", image: "5.jpg" },
+    { name: "BMW M1", image: "6.jpg" },
+    { name: "Porsche 959", image: "7.jpg" },
+    { name: "Aston Martin DB4 GT Zagato", image: "8.jpg" },
+    { name: "Jaguar XJ220", image: "9.jpg" },
+    { name: "Pagani Zonda Cinque", image: "10.jpg" },
+    { name: "Koenigsegg CCXR Trevita", image: "11.jpg" },
+    { name: "Ferrari F40", image: "12.jpg" },
+    { name: "Mercedes-AMG ONE", image: "13.jpg" },
+    { name: "Lamborghini Countach LP400", image: "14.jpg" },
+    { name: "Bugatti Veyron Super Sport", image: "15.jpg" },
+    { name: "BMW 507", image: "16.jpg" },
+    { name: "McLaren P1", image: "17.jpg" },
+    { name: "Aston Martin Valkyrie", image: "19.jpg" },
+    { name: "Jaguar D-Type", image: "20.jpg" },
+    { name: "Pagani Huayra BC", image: "21.jpg" },
+    { name: "Mercedes-Benz CLK GTR", image: "23.jpg" },
+    { name: "Lamborghini Diablo SE30 Jota", image: "24.jpg" },
+    { name: "Ferrari Enzo", image: "25.jpg" },
+    { name: "Jaguar E-Type Series 1", image: "30.jpg" },
+    { name: "Aston Martin One-77", image: "31.jpg" },
+    { name: "Mercedes-Benz SLR McLaren", image: "34.jpg" },
+    { name: "Lamborghini Reventón", image: "35.jpg" },
+    { name: "Ferrari 288 GTO", image: "36.jpg" },
+    { name: "Bugatti EB110 SS", image: "37.jpg" },
+    { name: "BMW M4 GTS", image: "38.jpg" },
+    { name: "Jaguar XJR-15", image: "41.jpg" },
+    { name: "Ferrari Testarossa", image: "43.jpg" },
+    { name: "Mercedes-Benz 540K", image: "46.jpg" },
+    { name: "Bugatti Divo", image: "47.jpg" },
+    { name: "BMW 2002 Turbo", image: "48.jpg" },
+    { name: "McLaren Senna", image: "49.jpg" },
+    { name: "Porsche 911 GT1", image: "52.jpg" },
+    { name: "Jaguar XKSS", image: "54.jpg" },
+    // { name: "Pagani Imola", image: "55.jpg" },
+    // { name: "Koenigsegg Gemera", image: "56.jpg" },
+    // { name: "Mercedes-Maybach Exelero", image: "57.jpg" },
+    // { name: "Ferrari Dino 246 GT", image: "58.jpg" },
+    // { name: "BMW i8", image: "59.jpg" },
+    // { name: "McLaren GT", image: "60.jpg" },
+    // { name: "Lamborghini Sesto Elemento", image: "61.jpg" },
+    // { name: "Bugatti Centodieci", image: "62.jpg" },
+    // { name: "Porsche 911 Turbo S", image: "63.jpg" },
+    // { name: "Jaguar C-X75", image: "64.jpg" },
+    // { name: "Aston Martin Lagonda", image: "65.jpg" },
+    // { name: "Ferrari Monza SP2", image: "66.jpg" },
+    // { name: "Koenigsegg One:1", image: "67.jpg" },
+    // { name: "Mercedes-AMG GT Black Series", image: "68.jpg" },
+    // { name: "Lamborghini Veneno", image: "69.jpg" },
+    // { name: "Pagani Zonda HP Barchetta", image: "70.jpg" },
+    // { name: "Bugatti La Voiture Noire", image: "71.jpg" },
+    // { name: "BMW 3.0 CSL Hommage", image: "72.jpg" },
+    // { name: "McLaren Elva", image: "73.jpg" },
+    // { name: "Porsche Taycan Turbo S", image: "74.jpg" },
+    // { name: "Jaguar XJ13", image: "75.jpg" },
+    // { name: "Ferrari F50", image: "76.jpg" },
+    // { name: "Lamborghini Centenario", image: "77.jpg" },
+    // { name: "Mercedes-Benz W196", image: "78.jpg" },
+    // { name: "Koenigsegg CCR", image: "79.jpg" },
+    // { name: "Pagani Huayra Roadster", image: "80.jpg" },
+    // { name: "Bugatti Bolide", image: "81.jpg" },
+    // { name: "BMW M5 CS", image: "82.jpg" },
+    // { name: "McLaren Artura", image: "83.jpg" },
+    // { name: "Aston Martin DBS Superleggera", image: "84.jpg" },
+    // { name: "Ferrari 330 P4", image: "85.jpg" },
+    // { name: "Jaguar XKR-S GT", image: "86.jpg" },
+    // { name: "Lamborghini Gallardo Superleggera", image: "87.jpg" },
+    // { name: "Porsche 911 R", image: "88.jpg" },
+    // { name: "Koenigsegg CC8S", image: "89.jpg" },
+    // { name: "Mercedes-Benz AMG GT R", image: "90.jpg" },
+    // { name: "McLaren MP4-12C", image: "91.jpg" },
+    // { name: "Ferrari SF90 Stradale", image: "92.jpg" },
+    // { name: "Bugatti Chiron Super Sport 300+", image: "93.jpg" },
+    // { name: "BMW M2 CS", image: "94.jpg" },
+    // { name: "Lamborghini Urus Performante", image: "95.jpg" },
+    // { name: "Porsche 911 GT3 RS", image: "96.jpg" },
+    // { name: "Aston Martin DBX707", image: "97.jpg" },
+    // { name: "Jaguar I-PACE", image: "98.jpg" },
+    // { name: "Pagani Huayra Tricolore", image: "99.jpg" },
+    // { name: "Koenigsegg Jesko Absolut", image: "100.jpg" }
+];
+
+        let currentIndex = 0;
+
+        function loadCar() {
+            document.getElementById("carImage").src = cars[currentIndex].image;
+            document.getElementById("guessInput").value = "";
+            document.getElementById("message").textContent = "";
+        }
+
+        function checkGuess() {
+            const guess = document.getElementById("guessInput").value.trim();
+            const message = document.getElementById("message");
+
+            if (guess.toLowerCase() === cars[currentIndex].name.toLowerCase()) {
+                message.textContent = "Correct!";
+                message.style.color = "green";
+                currentIndex = (currentIndex + 1) % cars.length;
+                setTimeout(loadCar, 1000);
+            } else {
+                message.textContent = "Wrong! Try again.";
+                message.style.color = "red";
+            }
+        }
+
+        loadCar();
+    </script>
+        <footer>
+            Abir Bhatt @2025
+        </footer>
+</body>
+</html>
