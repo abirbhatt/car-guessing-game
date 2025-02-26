@@ -131,33 +131,47 @@
     // { name: "Koenigsegg Jesko Absolut", image: "100.jpg" }
 ];
 
-        let currentIndex = 0;
+let currentIndex = parseInt(localStorage.getItem("carGameIndex")) || 0;
 
-        function loadCar() {
-            document.getElementById("carImage").src = cars[currentIndex].image;
-            document.getElementById("guessInput").value = "";
-            document.getElementById("message").textContent = "";
-        }
+function loadCar() {
+    document.getElementById("carImage").src = cars[currentIndex].image;
+    document.getElementById("guessInput").value = "";
+    document.getElementById("message").textContent = "";
+}
 
-        function checkGuess() {
-            const guess = document.getElementById("guessInput").value.trim();
-            const message = document.getElementById("message");
+function checkGuess() {
+    const guess = document.getElementById("guessInput").value.trim();
+    const message = document.getElementById("message");
 
-            if (guess.toLowerCase() === cars[currentIndex].name.toLowerCase()) {
-                message.textContent = "Correct!";
-                message.style.color = "green";
-                currentIndex = (currentIndex + 1) % cars.length;
-                setTimeout(loadCar, 1000);
-            } else {
-                message.textContent = "Wrong! Try again.";
-                message.style.color = "red";
-            }
-        }
+    if (guess.toLowerCase() === cars[currentIndex].name.toLowerCase()) {
+        message.textContent = "Correct!";
+        message.style.color = "green";
 
-        loadCar();
-    </script>
-        <footer>
-            Abir Bhatt @2025
-        </footer>
+        currentIndex = (currentIndex + 1) % cars.length;
+        localStorage.setItem("carGameIndex", currentIndex); // Save progress
+
+        setTimeout(loadCar, 1000);
+    } else {
+        message.textContent = "Wrong! Try again.";
+        message.style.color = "red";
+    }
+}
+
+// Reset progress button
+function resetProgress() {
+    localStorage.removeItem("carGameIndex");
+    currentIndex = 0;
+    loadCar();
+}
+
+loadCar();
+</script>
+
+<br><br>
+<button onclick="resetProgress()">Reset Progress</button>
+
+<footer>
+Abir Bhatt @2025
+</footer>
 </body>
 </html>
